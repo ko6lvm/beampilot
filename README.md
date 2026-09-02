@@ -25,7 +25,7 @@ Chestnut class models will take significantly more compute power; however, it wi
 * tinygrad gpu backend driver
 * any modern desktop CPU
 * 4GB VRAM for standard, 8GB VRAM for chestnut class models
-* 16GB DRAM for standard, 32GB DRAM for chestnut class models
+* 16GB VRAM for standard, 32GB DRAM for chestnut class models
 
 *(these limits are pretty conservative and are not tested hard limits)*
 
@@ -49,6 +49,7 @@ Settings/configs can be changed inside `config_beampilot.sh`:
 * `CHESTNUT`
   - changes between chestnut class (eGPU/dGPU) models or standard (mobile)
   - chestnut class models require 8GB+ VRAM
+  - see model selection
 
 ### Setup Script
 ```bash
