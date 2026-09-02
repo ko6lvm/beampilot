@@ -55,7 +55,7 @@ function op_get_openpilot_dir() {
   # First try traversing up the directory tree
   while [[ "$BEAMPILOT_ROOT" != '/' ]];
   do
-    if find "$BEAMPILOT_ROOT/launch_beampilot.sh" -maxdepth 1 -mindepth 1 &> /dev/null; then
+    if find "$BEAMPILOT_ROOT/launch_beampilot.sh" "$BEAMPILOT_ROOT/launch_openpilot.sh" -maxdepth 1 -mindepth 1 &> /dev/null; then
       return 0
     fi
     BEAMPILOT_ROOT="$(readlink -f "$BEAMPILOT_ROOT/"..)"
@@ -64,7 +64,7 @@ function op_get_openpilot_dir() {
   # Fallback to hardcoded directories if not found
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null && pwd)"
   for dir in "$(readlink -f "$SCRIPT_DIR/../..")" "$HOME/openpilot" "/data/openpilot"; do
-    if [[ -f "$dir/launch_beampilot.sh" ]]; then
+    if [[ -f "$dir/launch_beampilot.sh" ]] || [[ -f "$dir/launch_openpilot.sh" ]]; then
       BEAMPILOT_ROOT="$dir"
       return 0
     fi
@@ -83,7 +83,7 @@ function op_install_post_commit() {
 
 function op_check_openpilot_dir() {
   echo "Checking for openpilot directory..."
-  if [[ -f "$BEAMPILOT_ROOT/launch_beampilot.sh" ]]; then
+  if [[ -f "$BEAMPILOT_ROOT/launch_beampilot.sh" ]] || [[ -f "$BEAMPILOT_ROOT/launch_openpilot.sh" ]]; then
     echo -e " ↳ [${GREEN}✔${NC}] openpilot found."
     return 0
   fi

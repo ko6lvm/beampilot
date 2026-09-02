@@ -69,7 +69,7 @@ function launch {
   fi
 
   # handle pythonpath
-  ln -sfn $(pwd) /data/pythonpath
+  [ -d /data ] && ln -sfn $(pwd) /data/pythonpath 2>/dev/null || true
   export PYTHONPATH="$PWD"
 
   # submodule package symlinks for PYTHONPATH imports on device.
@@ -86,7 +86,7 @@ function launch {
   fi
 
   # write tmux scrollback to a file
-  tmux capture-pane -pq -S-1000 > /tmp/launch_log
+  tmux capture-pane -pq -S-1000 > /tmp/launch_log 2>/dev/null || true
 
   # start manager
   cd openpilot/system/manager

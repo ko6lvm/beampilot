@@ -90,4 +90,7 @@ def set_usb_state(device_state, devices: list[dict]) -> None:
     if is_chestnut_usb_id(entry.vendorId, entry.productId):
       chestnut_present = True
 
+  if os.environ.get("CHESTNUT") == "1":
+    chestnut_present = True
+
   device_state.chestnutPresent = chestnut_present

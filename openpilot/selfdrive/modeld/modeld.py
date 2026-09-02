@@ -240,14 +240,17 @@ def main(demo=False):
   chestnut_available = chestnut_present() and chestnut_compiled()
   CHESTNUT = False
   if chestnut_available:
-    poller = messaging.Poller()
-    sock = messaging.sub_sock("chestnutState", poller=poller, conflate=True)
-    deadline = time.monotonic() + 4. / SERVICE_LIST['deviceState'].frequency
-    while not CHESTNUT and (remaining := deadline - time.monotonic()) > 0.:
-      if not poller.poll(round(remaining * 1000)):
-        break
-      msg = messaging.recv_one_or_none(sock)
-      CHESTNUT = msg is not None and msg.valid and chestnut_ready(msg.chestnutState)
+    if os.environ.get("CHESTNUT") == "1":
+      CHESTNUT = True
+    else:
+      poller = messaging.Poller()
+      sock = messaging.sub_sock("chestnutState", poller=poller, conflate=True)
+      deadline = time.monotonic() + 4. / SERVICE_LIST['deviceState'].frequency
+      while not CHESTNUT and (remaining := deadline - time.monotonic()) > 0.:
+        if not poller.poll(round(remaining * 1000)):
+          break
+        msg = messaging.recv_one_or_none(sock)
+        CHESTNUT = msg is not None and msg.valid and chestnut_ready(msg.chestnutState)
   if CHESTNUT:
     os.environ['HCQDEV_WAIT_TIMEOUT_MS'] = '3000'
   params = Params()
